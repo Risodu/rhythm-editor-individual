@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Obchod</h1>
+    <h1>Nastavenia</h1>
     
     <div class="row">
         <% for( let i = 0; i < upgrades.length; i++ ) { %>
@@ -10,33 +10,21 @@
                 <h5 class="card-title"><%= upgrades[i].name %> </h5>
                 <p class="card-body"><%= upgrades[i].description %> </p>
                 <% if (upgrades[i].isPurchased) { %>
-                    <form action="/shop/buy/<%= upgrades[i].id %> " method="post">
-                        <% if (upgrades[i].cost > user.coins) { %>
-                            <button type="submit" class="btn btn-secondary" disabled>
-                                Kúpiť (<%- upgrades[i].cost %> 🪙)
-                            </button>    
-                        <% } else { %>
-                            <button type="submit" class="btn btn-primary">
-                                Kúpiť (<%- upgrades[i].cost %> 🪙)
-                            </button>
-                        <% } %> 
+                    <form action="/shop/activate/<%= upgrades[i].id %> " method="post">
+                        <button type="submit" class="btn btn-primary">
+                            Zapnúť
+                        </button>
                     </form>
                 <% } else { %>
-                    <button disabled class="btn btn-success">
-                        Kúpené
-                    </button>
+                    <form action="/shop/deactivate/<%= upgrades[i].id %> " method="post">
+                        <button type="submit" class="btn btn-success">
+                            Vypnúť
+                        </button>
+                    </form>
                 <% } %> 
             </div>
         <% } %>
     </div>
-    <hr class="m-2">
-    <h2>Získaj peniaze</h2>
-    <form id="redeemform" class="form-inline">
-        <div class="input-group">
-            <input type="text" id="code" name="code" placeholder="Zadaj kód" class="form-control">
-            <input type="submit" class="btn btn-primary">
-        </div>
-    </form>
     
     <script defer>
         const form = document.getElementById('redeemform')

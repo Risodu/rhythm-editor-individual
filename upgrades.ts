@@ -7,23 +7,23 @@ export interface upgrade {
     description: string;
     cost: number;
     /**
-     * Kúpil som upgrade, čo sa má stať?
+     * Zapol som upgrade, čo sa má stať?
      * @param data 
      * @returns referencia na nové dáta
      */
     apply: (data: Upgrades) => Upgrades
     /**
-     * Je tento upgrade kúpený?
+     * Vypol som upgrade, čo sa má stať?
+     * @param data 
+     * @returns referencia na nové dáta
+     */
+    unapply: (data: Upgrades) => Upgrades
+    /**
+     * Je tento upgrade zapnutý?
      * @param data 
      * @returns 
      */
     purchased: (data: Upgrades) => boolean
-    /**
-     * Je tento upgrade dostupný na kúpenie?
-     * @param data 
-     * @returns 
-     */
-    available?: (data: Upgrades) => boolean
 }
 
 const upgrades = <upgrade[]>[
@@ -38,6 +38,10 @@ const upgrades = <upgrade[]>[
         apply(data) {
             data.tolerance = 1
             return data
+        },
+        unapply(data) {
+            data.tolerance = 0
+            return data
         }
     },
     {
@@ -48,27 +52,12 @@ const upgrades = <upgrade[]>[
         purchased(data) {
             return data.tolerance >= 2
         },
-        available(data) {
-            return data.tolerance >= 1
-        },
         apply(data) {
             data.tolerance = 2
             return data
         },
-    },
-    {
-        name: 'Zrušenie penalizácie',
-        description: 'Zruší penalizáciu za stlačenie mimo rytmu, teda sa už nebudú mazať písmenká pri ťukaní mimo rytmu',
-        id: 2,
-        cost: 5000,
-        purchased(data) {
-            return !data.deleteOnMiss;
-        },
-        available(data) {
-            return data.tolerance >= 2
-        },
-        apply(data) {
-            data.deleteOnMiss = false
+        unapply(data) {
+            data.tolerance = 1
             return data
         }
     },
@@ -80,40 +69,80 @@ const upgrades = <upgrade[]>[
         purchased(data) {
             return data.tolerance >= 3
         },
-        available(data) {
-            return !data.deleteOnMiss;
-        },
         apply(data) {
             data.tolerance = 3
             return data
-        }
-    }, 
-    {
-        name: 'Tab',
-        description: 'Môžeš používať Tab namiesto 4 medzier',
-        id: 4,
-        cost: 500,
-        purchased(data) {
-            return data.useTab;
         },
-        available(data) {
-            return data.tolerance >= 1
-        },
-        apply(data) {
-            data.useTab = true
+        unapply(data) {
+            data.tolerance = 2
             return data
         }
-    }, 
+    },
+    {
+        name: 'Zrušenie penalizácie',
+        description: 'Zruší penalizáciu za stlačenie mimo rytmu, teda sa už nebudú mazať písmenká pri ťukaní mimo rytmu',
+        id: 2,
+        cost: 5000,
+        purchased(data) {
+            return !data.deleteOnMiss;
+        },
+        apply(data) {
+            data.deleteOnMiss = false
+            return data
+        },
+        unapply(data) {
+            data.deleteOnMiss = true
+            return data
+        }
+    },
+    {
+        name: 'Loop',
+        description: 'Po skončení začne pesnička znova, teda netreba stihnúť napísať kód za jednu iteráciu pesničky',
+        id: 22,
+        cost: 1000,
+        purchased(data) {
+            return data.looping;
+        },
+        apply(data) {
+            data.looping = true
+            return data
+        },
+        unapply(data) {
+            data.looping = false
+            return data
+        }
+    },
+    {
+        name: 'Multi submit',
+        description: 'Po submite sa ti kód nezmaže, a v prípade nesprávneho submitu môžeš v programovaní pokračovať',
+        id: 23,
+        cost: 1000,
+        purchased(data) {
+            return data.multiSubmit;
+        },
+        apply(data) {
+            data.multiSubmit = true
+            return data
+        },
+        unapply(data) {
+            data.multiSubmit = false
+            return data
+        }
+    },
     {
         name: 'Vizuálne efekty',
         description: 'Pozadie bude blikať do rytmu, čiže budeš vidieť, kedy stlačiť kláves',
         id: 11,
         cost: 250,
         purchased(data) {
-            return data.visualizer >= 1;
+            return data.visualizer & 1;
         },
         apply(data) {
             data.visualizer = 1
+            return data
+        },
+        unapply(data) {
+            data.visualizer = 0
             return data
         }
     },
@@ -125,27 +154,29 @@ const upgrades = <upgrade[]>[
         purchased(data) {
             return data.visualizer >= 2;
         },
-        available(data) {
-            return data.visualizer >= 1
-        },
         apply(data) {
             data.visualizer = 2
+            return data
+        },
+        unapply(data) {
+            data.visualizer = 1
             return data
         }
     },
     {
         name: 'Indikátor úspešných stlačení',
-        description: 'budeš lepšie vidieť kedy sa ti napísal znak a kedy nie',
+        description: 'Budeš lepšie vidieť kedy sa ti napísal znak a kedy nie',
         id: 13,
         cost: 250,
         purchased(data) {
             return data.successFeedback;
         },
-        available(data) {
-            return data.visualizer >= 1
-        },
         apply(data) {
             data.successFeedback = true
+            return data
+        },
+        unapply(data) {
+            data.successFeedback = false
             return data
         }
     },/*
@@ -156,7 +187,7 @@ const upgrades = <upgrade[]>[
         purchased(data) {
             return false;
         }
-    },*/
+    },
     {
         name: 'Slúchadlá',
         description: 'Máš povolenie si zobrať vlastné slúchadlá',
@@ -169,39 +200,24 @@ const upgrades = <upgrade[]>[
             data.headphones = true
             return data
         }
-    },
+    }, */
     {
-        name: 'Loop',
-        description: 'Po skončení začne pesnička znova, teda netreba stihnúť napísať kód za jednu iteráciu pesničky',
-        id: 22,
-        cost: 1000,
+        name: 'Tab',
+        description: 'Môžeš používať Tab namiesto 4 medzier',
+        id: 4,
+        cost: 500,
         purchased(data) {
-            return data.looping;
-        },
-        available(data) {
-            return data.headphones
+            return data.useTab;
         },
         apply(data) {
-            data.looping = true
+            data.useTab = true
+            return data
+        },
+        unapply(data) {
+            data.useTab = false
             return data
         }
-    },
-    {
-        name: 'Multi submit',
-        description: 'Po submite sa ti kód nezmaže, a v prípade nesprávneho submitu môžeš v programovaní pokračovať',
-        id: 23,
-        cost: 1000,
-        purchased(data) {
-            return data.multiSubmit;
-        },
-        available(data) {
-            return data.looping
-        },
-        apply(data) {
-            data.multiSubmit = true
-            return data
-        }
-    },
+    }, 
 ]
 
 export default upgrades
