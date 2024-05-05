@@ -6,6 +6,7 @@ Toto je fork [Stankovho](https://github.com/Stanko2) [rytmového editora](https:
 
 - Možnosť ľubovoľne zapínať a vypínať upgrady
 - Možnosť používať editor bez prihlásenia
+- Plánované sú aj ďalšie funkcie
 
 ## Návod na spustenie
 
