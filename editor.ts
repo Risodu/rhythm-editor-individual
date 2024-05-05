@@ -63,13 +63,6 @@ router.post('/:lid/submit', async (req, res) => {
         res.sendStatus(400)
         return
     }
-    if(user.completedLevels.includes(lid)) {
-        res.status(400)
-        res.send({
-            err: 'level already completed'
-        })
-        return
-    }
     const output = await test(req.body.program, user.name, levels[lid])
     
     if(output.status == 'OK'){
