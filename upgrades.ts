@@ -135,7 +135,7 @@ const upgrades = <upgrade[]>[
         id: 11,
         cost: 250,
         purchased(data) {
-            return data.visualizer & 1;
+            return data.visualizer >= 1;
         },
         apply(data) {
             data.visualizer = 1
