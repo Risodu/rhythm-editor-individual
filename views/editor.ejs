@@ -7,7 +7,7 @@
         <ul class="list-group">
             <% levels.forEach(level => { %>
                 <% if (user.completedLevels.includes(level.id)) { %>
-                    <a class="list-group-item list-group-item-success" tabindex="-1"><%- level.name %> </a>
+                    <a class="list-group-item list-group-item-success" href="/editor/<%= level.id %> " tabindex="-1"><%- level.name %> </a>
                 <% } else { %>
                     <a class="list-group-item list-group-item-action" href="/editor/<%= level.id %> " tabindex="-1"><%- level.name %> </a>
                 <% } %> 
