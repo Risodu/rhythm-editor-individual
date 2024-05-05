@@ -5,6 +5,23 @@
         "admin": true
     },
     {
+        "name": "default",
+        "password": "abc",
+        "admin": false,
+        "coins": 0,
+        "upgrades": {
+            "tolerance": 0,
+            "visualizer": 0,
+            "deleteOnMiss": true,
+            "headphones": false,
+            "successFeedback": false,
+            "looping": false,
+            "useTab": false,
+            "multiSubmit": false
+        },
+        "completedLevels": []
+    },
+    {
         "name": "simpanzy_1",
         "password": "CardRepresentative",
         "admin": false,

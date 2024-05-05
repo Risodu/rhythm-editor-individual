@@ -18,6 +18,12 @@
     <button type="submit" class="btn btn-primary">Prihlásiť</button>
 </form>
 
+<form class="form container" id="loginForm" action="/login" method="post">
+  <input type="hidden" name="meno" id="inputMeno" class="form-control" value="default">
+  <input type="hidden" name="heslo" id="inputPassword" class="form-control" value="abc">
+  <button type="submit" class="btn btn-primary">Pokračovať bez prihlásenia</button>
+</form>
+
 <script defer>
     // const form = document.getElementById("loginForm");
     // form.addEventListener('submit', (e)=> {
