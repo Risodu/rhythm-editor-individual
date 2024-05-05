@@ -4,6 +4,8 @@ import { readdir, readFile } from 'fs/promises'
 import path from 'path'
 import { test } from "./testovac";
 import { db } from "./db";
+import fs from 'fs/promises';
+import { spawn } from 'child_process';
 
 const router = Router()
 
@@ -47,6 +49,7 @@ router.get('/:lid', async (req, res) => {
             }
         }).sort((a,b) => a.order - b.order),
         zadanie: zadania[req.params.lid],
+        lid: lid,
         data: JSON.stringify(levels[req.params.lid]),
         testOutput: undefined
     });
@@ -67,6 +70,7 @@ router.post('/:lid/submit', async (req, res) => {
     
     if(output.status == 'OK'){
         user.completedLevels.push(lid)
+        createHistogram(req.body.offsets, lid, user.name)
         await db.setUser(user);
     }
 
@@ -85,6 +89,15 @@ async function loadLevels() {
 
     console.log(`Loaded ${Object.keys(levels).length} levels`);
     
+}
+
+async function createHistogram(offsets: Array<number>, lid: string, user: string) {
+    const dataPath = path.join(__dirname, 'levels', lid, 'submits', user + '.json')
+    fs.writeFile(dataPath, JSON.stringify(offsets));
+
+    const histPath = path.join(__dirname, 'static', 'histograms', user, lid + '.png')
+    var isWin = process.platform === "win32";
+    spawn(isWin ? 'python' : 'python3', ['histogram.py', dataPath, histPath])
 }
 
 loadLevels()

@@ -7,6 +7,8 @@ const submitBtn = document.getElementById('submit')
 const levelSelect = document.getElementById('level-select')
 const game = document.getElementById('level')
 const message = document.getElementById('score-message')
+const results = document.getElementById('results')
+
 hljs.highlightAll();
 // const c = document.getElementById('c')
 
@@ -14,6 +16,8 @@ playBtn.onclick = play
 stopBtn.onclick = stop
 submitBtn.onclick = submit
 let programText = ''
+
+let offsets = []
 
 const escapeHtml = (unsafe) => {
     return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -148,6 +152,7 @@ function play() {
     stopBtn.classList.remove('d-none')
     playBtn.classList.add('d-none')
     levelSelect.classList.add('d-none')
+    results.classList.add('d-none')
     game.classList.remove('col-8')
     player = new Player({
         bpm: levelData.bpm,
@@ -175,6 +180,8 @@ function play() {
             programText = programText.slice(0, -1)
         } else {
             if(s === false || s == undefined) return
+            offsets.push(offset)
+            console.log(offsets)
             if(GetHitAccuracy(Math.abs(offset)) <= upgrades.tolerance && lastBeatPressed != currBeat) {
                 if(s === '\t' && !upgrades.useTab)
                     return
@@ -268,6 +275,7 @@ function stop() {
     stopBtn.classList.add('d-none')
     playBtn.classList.remove('d-none')
     levelSelect.classList.remove('d-none')
+    results.classList.remove('d-none')
     game.classList.add('col-8')
     player?.stop()
     player = null
@@ -286,7 +294,8 @@ async function submit() {
     const res = await fetch(location.href + '/submit', {
         method: 'POST',
         body: JSON.stringify({
-            program: programText
+            "program": programText,
+            "offsets": offsets
         }),
         headers: {
             'Content-Type': 'application/json'

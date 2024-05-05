@@ -35,6 +35,14 @@
         <div class="code">
             <pre><code class="language-python" id="code"></code></pre>
         </div>
+        <div id="results">
+            <h3>Výsledky</h3>
+            <% if (user.completedLevels.includes(lid)) { %>
+            <img src="/histograms/<%= user.name %>/<%= lid %>.png" title="Histogram relatívnych posunov stlačení klávesu" alt="Nebolo možné načítať histogram presnosti">
+            <% } else { %>
+            <p>Tento level nie je dokončený.</p>
+            <% } %>
+        </div>
         <div id="score-message"></div>
     </div>
     <canvas id="c"></canvas>
