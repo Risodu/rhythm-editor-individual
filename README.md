@@ -1,4 +1,11 @@
-# AlgoRYTMUS
+# AlgoRYTMUS pre jednotlivcov
+
+Toto je fork [Stankovho](https://github.com/Stanko2) [rytmového editora](https://github.com/Stanko2/rhythm-editor), ktorý je upravený na použite pre jednotlivcov.
+
+## Zmeny oproti pôvodnému editoru
+
+- Možnosť ľubovoľne zapínať a vypínať upgrady
+- Možnosť používať editor bez prihlásenia
 
 ## Návod na spustenie
 
@@ -21,7 +28,13 @@ bun install
 bun run index.ts loadUsers
 ```
 
-4. Spustím server
+4. Vytvorím priečínky na submity
+
+```bash
+python3 makeSubmitFolders.py
+```
+
+5. Spustím server
 
 ```bash
 bun run index.ts
