@@ -8,6 +8,7 @@ Toto je fork [Stankovho](https://github.com/Stanko2) [rytmového editora](https:
 - Možnosť používať editor bez prihlásenia
 - Možnosť hrať level znova po dokončení
 - Zobrazovanie histogramu presnosti po dokončení levelu (treba refreshnúť stránku)
+- Predvolené úrovne obtiažnosti
 - Plánované sú aj ďalšie funkcie
 
 ## Návod na spustenie

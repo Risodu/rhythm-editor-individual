@@ -1,5 +1,14 @@
 <div class="container">
     <h1>Nastavenia</h1>
+
+    <h3>Obtiažnosť</h3>
+    <div class="row">
+        <% for( let i = 0; i < presets.length; i++) { %>
+            <form class="col-md-auto" action="/shop/preset/<%= presets[i].id %>" method="post">
+                <button type="btn submit" class="btn btn<%= presets[i].id == chosenPresetId ? "" : "-outline" %>-<%= presets[i].style %>"><%= presets[i].name %></button>
+            </form>
+        <% } %>
+    </div>
     
     <div class="row">
         <% for( let i = 0; i < upgrades.length; i++ ) { %>

@@ -26,6 +26,13 @@ export interface upgrade {
     purchased: (data: Upgrades) => boolean
 }
 
+export interface Preset {
+    id: number;
+    name: string;
+    style: string;
+    upgrades: Upgrades;
+}
+
 const upgrades = <upgrade[]>[
     {
         name: 'Základná tolerancia',
@@ -220,4 +227,99 @@ const upgrades = <upgrade[]>[
     }, 
 ]
 
-export default upgrades
+const presets = <Preset[]>[
+    {
+        id: 0,
+        name: 'Cvičná',
+        style: 'success',
+        upgrades: {
+            tolerance: 3,
+            visualizer: 2,
+            deleteOnMiss: false,
+            successFeedback: true,
+            looping: true,
+            useTab: true,
+            multiSubmit: true
+        }
+    },
+    {
+        id: 1,
+        name: 'Ľahká',
+        style: 'primary',
+        upgrades: {
+            tolerance: 2,
+            visualizer: 2,
+            deleteOnMiss: false,
+            successFeedback: true,
+            looping: true,
+            useTab: true,
+            multiSubmit: false
+        }
+    },
+    {
+        id: 2,
+        name: 'Stredná',
+        style: 'warning',
+        upgrades: {
+            tolerance: 2,
+            visualizer: 1,
+            deleteOnMiss: true,
+            successFeedback: true,
+            looping: true,
+            useTab: true,
+            multiSubmit: false
+        }
+    },
+    {
+        id: 3,
+        name: 'Ťažká',
+        style: 'danger',
+        upgrades: {
+            tolerance: 1,
+            visualizer: 1,
+            deleteOnMiss: true,
+            successFeedback: true,
+            looping: false,
+            useTab: false,
+            multiSubmit: false
+        }
+    },
+    {
+        id: 4,
+        name: 'Extrémna',
+        style: 'dark',
+        upgrades: {
+            tolerance: 0,
+            visualizer: 0,
+            deleteOnMiss: true,
+            successFeedback: false,
+            looping: false,
+            useTab: false,
+            multiSubmit: false
+        }
+    }
+]
+
+function isHarder(easy: Upgrades, hard: Upgrades): boolean {
+    if(hard.tolerance > easy.tolerance) return false;
+    if(hard.visualizer > easy.visualizer) return false;
+    if(!hard.deleteOnMiss && easy.deleteOnMiss) return false;
+    if(hard.successFeedback && !easy.successFeedback) return false;
+    if(hard.looping && !easy.looping) return false;
+    if(hard.useTab && !easy.useTab) return false;
+    if(hard.multiSubmit && !easy.multiSubmit) return false;
+    return true
+}
+
+function getPreset(upgrades: Upgrades): Preset | undefined {
+    let chosenPreset
+    for (let i = 0; i < presets.length; i++) {
+        if(!isHarder(presets[i].upgrades, upgrades)) {
+            break
+        }            
+        chosenPreset = presets[i]
+    }
+    return chosenPreset
+}
+
+export { upgrades, presets, getPreset }
