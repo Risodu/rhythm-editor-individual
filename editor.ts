@@ -6,6 +6,7 @@ import { test } from "./testovac";
 import { db } from "./db";
 import fs from 'fs/promises';
 import { spawn } from 'child_process';
+import { getPreset, presets } from './upgrades'
 
 const router = Router()
 
@@ -51,7 +52,8 @@ router.get('/:lid', async (req, res) => {
         zadanie: zadania[req.params.lid],
         lid: lid,
         data: JSON.stringify(levels[req.params.lid]),
-        testOutput: undefined
+        testOutput: undefined,
+        presets: presets
     });
 })
 
@@ -69,7 +71,7 @@ router.post('/:lid/submit', async (req, res) => {
     const output = await test(req.body.program, user.name, levels[lid])
     
     if(output.status == 'OK'){
-        user.completedLevels.push(lid)
+        user.completedLevels.push({level: lid, difficulty: getPreset(user.upgrades).id})
         createHistogram(req.body.offsets, lid, user.name)
         await db.setUser(user);
     }

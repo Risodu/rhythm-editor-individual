@@ -311,8 +311,8 @@ function isHarder(easy: Upgrades, hard: Upgrades): boolean {
     return true
 }
 
-function getPreset(upgrades: Upgrades): Preset | undefined {
-    let chosenPreset
+function getPreset(upgrades: Upgrades): Preset {
+    let chosenPreset = presets[0]
     for (let i = 0; i < presets.length; i++) {
         if(!isHarder(presets[i].upgrades, upgrades)) {
             break

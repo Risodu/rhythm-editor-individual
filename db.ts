@@ -8,7 +8,12 @@ export interface User {
     upgrades: Upgrades;
     id: number;
     admin: boolean;
-    completedLevels: string[];
+    completedLevels: Submit[];
+}
+
+export interface Submit {
+    level: string;
+    difficulty: number;
 }
 
 export interface Upgrades {
